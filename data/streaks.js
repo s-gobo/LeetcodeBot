@@ -13,7 +13,7 @@ module.exports = {
         }
         await config.volatile.guilds[message.guildId].discussionChannel.send(message.url)
         config.streaks[message.guildId][message.author.id].hasSubmitted = true;
-        config.backupStreaks();
+        this.backup();
     },
     async newDay() {
         for (const guildId in config.streaks) {
@@ -28,16 +28,17 @@ module.exports = {
                     re += ":x:";
                     userData.streak = 0;
                 }
-                const {alias, streak} = userData;
-                re += ` ${alias} — :fire: ${streak}\n`
+                const alias = config.settings.guilds[guildId].people[userId];
+                re += ` ${alias} — :fire: ${userData.streak}\n`
             }
             await config.volatile.guilds[guildId].discussionChannel.send(re);
         }
-        await backup();
+        await this.backup();
     },
     isSubmission(message) {
         return config.settings.guilds[message.guildId]?.forum === message.channel.parentId &&
-            (message.content.includes("```") || message.attachments.size > 0);
+            (message.content.includes("```") || message.attachments.size > 0) &&
+            !config.streaks[message.guildId][message.author.id].hasSubmitted;
     },
     async backup() {
         await fs.writeFile(config.dev.streaksPath, JSON.stringify(config.streaks));
