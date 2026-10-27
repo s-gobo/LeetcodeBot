@@ -1,8 +1,9 @@
 const { TextDisplayBuilder, FileBuilder, AttachmentBuilder, MessageFlags } = require('discord.js');
 const fs = require('node:fs/promises');
+const streaks = require('./data/streaks');
 
 module.exports = {
-    version: '00b',
+    version: '00c',
     app: {
         token: process.env.DISCORD_TOKEN,
         clientId: process.env.APP_ID,
@@ -45,10 +46,7 @@ module.exports = {
             })
         }
         
-        // load old streaks
-        const oldStreaks = JSON.parse((await fs.readFile(this.dev.streaksPath)).toString('utf8'));
-        this.streaks = oldStreaks;
-        console.log(this.streaks)
+        await streaks.init();
         
         // load volatile guild channels
         for (const guildID in this.settings.guilds) {

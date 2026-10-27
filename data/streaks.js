@@ -2,7 +2,11 @@ const fs = require('node:fs/promises');
 const config = require("../config");
 
 module.exports = {
-    async init() {},
+    async init() {
+        const file = await fs.readFile(config.dev.streaksPath);
+        const oldStreaks = JSON.parse(file.toString('utf8'));
+        config.streaks = oldStreaks;
+    },
     async submission(message) {
         if (!this.isSubmission(message)) {
             return;
