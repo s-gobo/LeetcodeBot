@@ -11,8 +11,10 @@ module.exports = {
         if (!this.isSubmission(message)) {
             return;
         }
-        await config.volatile.guilds[message.guildId].discussionChannel.send(message.url)
-        config.streaks[message.guildId][message.author.id].todaySubmissions.push({url: message.url})
+        await config.volatile.guilds[message.guildId].discussionChannel.send(message.url);
+        const userData = config.streaks[message.guildId][message.author.id];
+        userData.todaySubmissions.push({url: message.url})
+        userData.totalSubmissions++;
         this.backup();
     },
     async newDay() {
@@ -24,12 +26,13 @@ module.exports = {
                     re += ":white_check_mark:";
                     userData.streak++;
                     userData.todaySubmissions = [];
+                    userData.totalSubmittedDays++;
                 } else {
                     re += ":x:";
                     userData.streak = 0;
                 }
                 const alias = config.settings.guilds[guildId].people[userId];
-                re += ` ${alias} — :fire: ${userData.streak}\n`
+                re += ` ${alias} — :fire: ${userData.streak} (${userData.totalSubmittedDays} days)\n`
             }
             await config.volatile.guilds[guildId].discussionChannel.send(re);
         }
