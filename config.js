@@ -2,7 +2,7 @@ const { TextDisplayBuilder, FileBuilder, AttachmentBuilder, MessageFlags } = req
 const fs = require('node:fs/promises');
 
 module.exports = {
-    version: '00b',
+    version: '00c',
     app: {
         token: process.env.DISCORD_TOKEN,
         clientId: process.env.APP_ID,
@@ -45,11 +45,6 @@ module.exports = {
             })
         }
         
-        // load old streaks
-        const oldStreaks = JSON.parse((await fs.readFile(this.dev.streaksPath)).toString('utf8'));
-        this.streaks = oldStreaks;
-        console.log(this.streaks)
-        
         // load volatile guild channels
         for (const guildID in this.settings.guilds) {
             this.volatile.guilds[guildID] = {
@@ -82,9 +77,6 @@ module.exports = {
         //     flags: MessageFlags.IsComponentsV2,
         // })
     },
-    async backupStreaks() {
-        await fs.writeFile(this.dev.streaksPath, JSON.stringify(this.streaks));
-    },
     async log(arg) {
         if (typeof arg === "string") {
             await this.volatile.logChannel.send(arg);
@@ -97,8 +89,4 @@ module.exports = {
             }
         }
     },
-    isSubmission(message) {
-        return this.settings.guilds[message.guildId]?.forum === message.channel.parentId &&
-            (message.content.includes("```") || message.attachments.size > 0);
-    }
 }
