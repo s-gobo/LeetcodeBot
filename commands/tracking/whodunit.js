@@ -12,9 +12,12 @@ module.exports = {
         }
         let re = "";
         for (const userId in config.streaks[interaction.guildId]) {
-            const { hasSubmitted } = config.streaks[interaction.guildId][userId];
+            const hasSubmitted = !!config.streaks[interaction.guildId][userId].todaySubmissions.length;
             const alias = config.settings.guilds[interaction.guildId].people[userId];
             re += `${alias} has ${hasSubmitted ? "" : "not "}submitted today!\n`;
+            for (const submission of config.streaks[interaction.guildId][userId].todaySubmissions) {
+                re += `- ${submission.url}\n`;
+            }
         }
         await interaction.reply(re);
     }
