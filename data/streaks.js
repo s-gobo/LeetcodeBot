@@ -1,3 +1,4 @@
+const fs = require('node:fs/promises');
 const config = require("../config");
 
 module.exports = {
@@ -28,10 +29,13 @@ module.exports = {
             }
             await config.volatile.guilds[guildId].discussionChannel.send(re);
         }
-        await config.backupStreaks();
+        await backup();
     },
     isSubmission(message) {
         return config.settings.guilds[message.guildId]?.forum === message.channel.parentId &&
             (message.content.includes("```") || message.attachments.size > 0);
+    },
+    async backup() {
+        await fs.writeFile(config.dev.streaksPath, JSON.stringify(config.streaks));
     },
 }

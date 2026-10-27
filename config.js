@@ -82,9 +82,6 @@ module.exports = {
         //     flags: MessageFlags.IsComponentsV2,
         // })
     },
-    async backupStreaks() {
-        await fs.writeFile(this.dev.streaksPath, JSON.stringify(this.streaks));
-    },
     async log(arg) {
         if (typeof arg === "string") {
             await this.volatile.logChannel.send(arg);
