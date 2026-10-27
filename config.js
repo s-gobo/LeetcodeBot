@@ -1,6 +1,5 @@
 const { TextDisplayBuilder, FileBuilder, AttachmentBuilder, MessageFlags } = require('discord.js');
 const fs = require('node:fs/promises');
-const streaks = require('./data/streaks');
 
 module.exports = {
     version: '00c',
@@ -45,8 +44,6 @@ module.exports = {
                 flags: MessageFlags.IsComponentsV2,
             })
         }
-        
-        await streaks.init();
         
         // load volatile guild channels
         for (const guildID in this.settings.guilds) {
