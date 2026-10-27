@@ -97,8 +97,4 @@ module.exports = {
             }
         }
     },
-    isSubmission(message) {
-        return this.settings.guilds[message.guildId]?.forum === message.channel.parentId &&
-            (message.content.includes("```") || message.attachments.size > 0);
-    }
 }
