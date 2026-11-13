@@ -10,7 +10,11 @@ module.exports = {
         }
         streaks.submission(message);
         if (config.settings.echoChannels[message.channelId]) {
-            await message.reply(message.content != '' ? message.content : "empty message");
+            if(message.content.includes("meow")) {
+                await message.reply("stop.");
+            } else {
+                await message.reply(message.content != '' ? message.content : "empty message");
+            }
         }
     }
 }
